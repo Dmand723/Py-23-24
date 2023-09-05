@@ -1,6 +1,6 @@
 #Dawson Simmons
 #Alarm Clock Main Script  
-#Last Edit 8/25/23
+#Last Edit 9/5/23
 
 #Imports
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,6 +26,11 @@ is_mil_time = True
 tag = ""
 H24_H12 = ""
 milCxBox = ""
+ui = ""
+low = 0
+high = 24
+curTZ = MST
+timeZoneCb = ""
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,36 +111,110 @@ def rootSetup():
     
     return root
 
+#Create Main UT box
+def createUI():
+    global ui
+    ui = Frame(root, height=50,width=WIDTH,background="purple")
+    ui.place(x=0, y=HIGHT-50)
+    ui.pack_propagate(False)
+
+#show the time
+def createTimeLbl():
+    global time_lbl
+    size = int(HIGHT *.25)
+    fnt = font.Font(family="Century Gothic", size=size, weight="bold")
+    time_lbl = ttk.Label(root,  textvariable=time_text, foreground= "blue",background= "Black", font= fnt)
+    time_lbl.place(x=WIDTH/2, y= HIGHT /2, anchor=CENTER)
+
+#Check box for military or std time 
 def createMilCxBox():
     global milCxBox
-    milCxBox = Checkbutton(root, text= "12 Hour Format", command= toggleMil)
-    milCxBox.place(x = 20, y= 20)
-    milCxBox
-    #btn1 = Button(root, text= H24_H12 , bd= 5, command=switchAMPM())
-    #btn1.pack(side= 'top')
+    global ui
+    milCxBox = Checkbutton(ui, text= "12 Hour Format", command= toggleMil)
+    milCxBox.pack(side= RIGHT)
+    
+    
+    
+#Create stop alarm button
+def createStopBtn():
+    global ui
+    stopBtn = Button(ui, text= "Stop", command=stopAlarm, width=10)
+    stopBtn.pack(side= LEFT)
 
-def createPlyBtn():
-    playBtn = Button(root, text= "Test sound", command=playAlarm)
-    playBtn.place(x=3,y=3)
+#Create Snooz alarm button
+def createSnoozBtn():
+    stopBtn = Button(ui, text= "Snooz", command=snoozAlarm,width=10)
+    stopBtn.pack(side= LEFT)
+
+def createSetBtn():
+    stopBtn = Button(ui, text= "Set Alarm", command=setAlarm,width=10)
+    stopBtn.pack(side= RIGHT)
+
+def createTimeZoneBtn():
+    global timeZoneCb
+    timeZoneCb = ttk.Combobox(ui,values=["EST","CST","MST","PST"], justify="center",width=5,height=25)
+    timeZoneCb.pack(side = RIGHT)
+    timeZoneCb.bind("<<ComboboxSelected>>", setCurTZ)
+    timeZoneCb.current(2)
+
+def createAlarmBtns():
+    alarmTag = StringVar()
+
+    amCkBox = Radiobutton(ui, text="AM",variable=alarmTag,value="AM" )
+    pmCkBox = Radiobutton(ui, text="PM",variable=alarmTag,value="PM")
+    amCkBox.pack(side = RIGHT)
+    pmCkBox.pack(side =RIGHT)
+
+    alarmHour = Spinbox(ui, from_=low,to=high, justify="center", width=5)
+    alarmMin = Spinbox(ui, from_=0,to=59, justify="center", width=5)
+    alarmMin.pack(side=RIGHT)
+    alarmHour.pack(side=RIGHT)
+
+def setCurTZ(trash):
+    global curTZ
+    global timeZoneCb
+    temp = timeZoneCb.get()
+    if temp == "EST":
+        curTZ = EST
+    elif temp == "MST":
+        curTZ = MST
+    elif temp == "PST":
+        curTZ = PST
+    elif temp == "CST":
+        curTZ = CST
 
 def playAlarm():
     alarm1()
+
+def stopAlarm():
+    print("stop")
+
+def snoozAlarm():
+    print("snooz")
+
+def setAlarm():
+    print("set")
 
 def toggleMil():
     global is_mil_time
     is_mil_time = not is_mil_time
 
 def createWidiges():
-    global time_lbl
-    size = int(HIGHT *.25)
-    fnt = font.Font(family="Century Gothic", size=size, weight="bold")
-    time_lbl = ttk.Label(root,  textvariable=time_text, foreground= "blue",background= "Black", font= fnt)
-    time_lbl.place(x=WIDTH/2, y= HIGHT /2, anchor=CENTER)
+    createUI()
+
+    createTimeLbl()
     createMilCxBox()
-    createPlyBtn()
+    createTimeZoneBtn() 
+    createStopBtn()
+    createSetBtn()
+    createSnoozBtn()
+    createAlarmBtns()
+
+    
+    
 
 def runClock():
-    time_text.set(getTime(MST))
+    time_text.set(getTime(curTZ))
     updateWidiges()
     
     
@@ -153,7 +232,8 @@ def updateWidiges():
     # fnt = font.Font(family = "Century Gothic" ,size=size , weight= 'bold')
     # time_lbl.config(font=fnt)
     time_lbl.place(x = x/2 , y = y/2, anchor = CENTER)
-    milCxBox.place(x=10, y = y -30)
+    ui.config(width=x)
+    ui.place(x=0,y=y-50)
     
 
     

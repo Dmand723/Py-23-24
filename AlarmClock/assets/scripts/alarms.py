@@ -1,5 +1,71 @@
-from winsound import *
+import winsound
+from assets.scripts.MusicNotes import * 
+
+#notes
+
+
+
+
 
 def alarm1():
-    for i in range(1):
-        Beep(32767,1000)
+    # First section
+    hcnote()
+    gnote()
+    enote()
+    anote()
+    sbnote()
+    sbflatnote()
+    anote()
+    sgnote()
+    shenote()
+    shgnote()
+    hanote()
+    shfnote()
+    shgnote()
+    henote()
+    shcnote()
+    shdnote()
+    lbnote()
+
+    
+    hcnote()
+    gnote()
+    enote()
+    anote()
+    sbnote()
+    sbflatnote()
+    anote()
+    sgnote()
+    shenote()
+    shgnote()
+    hanote()
+    shfnote()
+    shgnote()
+    henote()
+    shcnote()
+    shdnote()
+    lbnote()
+
+
+
+    shgnote()
+    shfsharpnote()
+    shfnote()
+    shdsharpnote()
+    shenote()
+    sgsharpnote()
+    sanote()
+    shcnote()
+    sanote()
+    shcnote()
+    sdnote()
+
+    shgnote()
+    shfsharpnote()
+    shfnote()
+    shdsharpnote()
+    shenote()
+
+    hhcnote()
+    shhcnote()
+    shhcnote()
