@@ -19,7 +19,15 @@ from assets.scripts.alarms import *
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #globals---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+debug = True
+
+
+cur_hour = 0
+cur_min = 0
+cur_sec = 0
+
 running = True
+isAlarmsOpen = False
 cur_time_str = ""
 time_lbl = ""
 is_mil_time = True
@@ -27,11 +35,22 @@ tag = ""
 H24_H12 = ""
 milCxBox = ""
 ui = ""
+alarmsTab = ""
 low = 0
 high = 24
 curTZ = MST
 timeZoneCb = ""
+amCkBox = ""
+pmCkBox = ""
+alarmMinSb = ""
+alarmHourSb = ""
+setBtn = ""
+alarmHour = 0
+alarmMin = 0
 
+isAlarmMilTime = True
+isAlarmOn = False
+isAlarmPlaying = False
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -39,8 +58,10 @@ timeZoneCb = ""
 
 # Funtion that finds the current time 
 def  getTime(tz):
-    global H24_H12
     global tag
+    global cur_hour
+    global cur_min
+    global cur_sec
     total_time = cal.timegm(time.gmtime())
     cur_sec = total_time % 60
     total_min = total_time // 60
@@ -51,7 +72,6 @@ def  getTime(tz):
 
     
     if  is_mil_time == False:
-        H24_H12 = "12 Hour Format"
         if cur_hour > 12:
             str_hour = str(cur_hour - 12)
         if cur_hour > 11:
@@ -64,7 +84,6 @@ def  getTime(tz):
     
     
     if is_mil_time:
-        H24_H12 = "24 Hour Format"
         tag = ""
 
     str_hour = str(cur_hour)
@@ -95,11 +114,9 @@ def rootSetup():
     root = Tk()
     root.geometry(geoString)
     root.title(TITLE)
-    root.iconbitmap('assets/sprites/clock.ico')
+    #root.iconbitmap('assets/sprites/clock.ico')
     root.configure(background= ROOT_COLOR)
-    
-    
-
+   
 
     
 
@@ -111,7 +128,9 @@ def rootSetup():
     
     return root
 
-#Create Main UT box
+
+
+#Create Main UI box
 def createUI():
     global ui
     ui = Frame(root, height=50,width=WIDTH,background="purple")
@@ -131,44 +150,83 @@ def createMilCxBox():
     global milCxBox
     global ui
     milCxBox = Checkbutton(ui, text= "12 Hour Format", command= toggleMil)
-    milCxBox.pack(side= RIGHT)
+    milCxBox.pack(side= RIGHT,padx=10)
+
+#Create alarms tab
+def createAlarmsTab():
+    global alarmsTab
+    global isAlarmsOpen
+    if isAlarmsOpen:
+        return
+    isAlarmsOpen = True
+    alarmsTab = Frame(root, height=70, width=100,background="blue")
+    alarmsTab.place(x=0,y=0)
+    alarmsTab.pack_propagate(False)
     
-    
-    
+    createAlarmBtns()
+
+#Destroy the alarms tab
+def hideAlarmsTab():
+    global isAlarmsOpen
+    isAlarmsOpen = False
+    alarmsTab.destroy()
+
+
+
 #Create stop alarm button
 def createStopBtn():
-    global ui
     stopBtn = Button(ui, text= "Stop", command=stopAlarm, width=10)
-    stopBtn.pack(side= LEFT)
+    stopBtn.pack(side= LEFT,padx=10)
 
 #Create Snooz alarm button
 def createSnoozBtn():
     stopBtn = Button(ui, text= "Snooz", command=snoozAlarm,width=10)
-    stopBtn.pack(side= LEFT)
+    stopBtn.pack(side= LEFT,padx=10)
 
-def createSetBtn():
-    stopBtn = Button(ui, text= "Set Alarm", command=setAlarm,width=10)
-    stopBtn.pack(side= RIGHT)
+def setAlarmBtnFunc():
+    createAlarmsTab()
 
+#Create The button to set an alarm 
+def createSetBtn(name):
+    global setBtn
+    setBtn = Button(ui, text= name, command=setAlarmBtnFunc,width=10)
+    setBtn.pack(side= RIGHT,padx=10)
+
+#Create the dropdown menu to change the timezone 
 def createTimeZoneBtn():
     global timeZoneCb
     timeZoneCb = ttk.Combobox(ui,values=["EST","CST","MST","PST"], justify="center",width=5,height=25)
-    timeZoneCb.pack(side = RIGHT)
+    timeZoneCb.pack(side = RIGHT,padx=10)
     timeZoneCb.bind("<<ComboboxSelected>>", setCurTZ)
     timeZoneCb.current(2)
 
+#Create the Buttons to change the time of alarm and set alarm 
 def createAlarmBtns():
+    global amCkBox
+    global pmCkBox
+    global alarmMinSb
+    global alarmHourSb
     alarmTag = StringVar()
 
-    amCkBox = Radiobutton(ui, text="AM",variable=alarmTag,value="AM" )
-    pmCkBox = Radiobutton(ui, text="PM",variable=alarmTag,value="PM")
-    amCkBox.pack(side = RIGHT)
-    pmCkBox.pack(side =RIGHT)
+    saveAlarmBtn = Button(alarmsTab,text="Save Alarm", command=saveAlarmFunc)
+    saveAlarmBtn.pack(side=RIGHT,padx=10)
 
-    alarmHour = Spinbox(ui, from_=low,to=high, justify="center", width=5)
-    alarmMin = Spinbox(ui, from_=0,to=59, justify="center", width=5)
-    alarmMin.pack(side=RIGHT)
-    alarmHour.pack(side=RIGHT)
+    amCkBox = Radiobutton(alarmsTab, text="AM",variable=alarmTag,value="AM",justify="center" )
+    pmCkBox = Radiobutton(alarmsTab, text="PM",variable=alarmTag,value="PM",justify="center")
+    if is_mil_time == False:
+        amCkBox.pack(side = RIGHT)
+        pmCkBox.pack(side =RIGHT)
+
+    alarmHourSb = Spinbox(alarmsTab, from_=low,to=high, justify="center", width=5)
+    alarmMinSb = Spinbox(alarmsTab, from_=0,to=59, justify="center", width=5,)
+    alarmMinSb.pack(side=RIGHT,padx=10)
+    alarmHourSb.pack(side=RIGHT,padx=10)
+    alarmCxBox = Checkbutton(alarmsTab, text= "On", command= toggleAlarm)
+    alarmCxBox.pack(side=RIGHT,padx=10)
+
+    
+
+
 
 def setCurTZ(trash):
     global curTZ
@@ -184,31 +242,66 @@ def setCurTZ(trash):
         curTZ = CST
 
 def playAlarm():
+    global isAlarmPlaying
     alarm1()
+    isAlarmPlaying = True
 
 def stopAlarm():
+    isAlarmPlaying = False
     print("stop")
 
 def snoozAlarm():
     print("snooz")
 
-def setAlarm():
-    print("set")
+def saveAlarmFunc():
+    saveAlarmTime()
+    changeSetName()
+    hideAlarmsTab()
+
+#Sets the alarmtime
+def saveAlarmTime():
+    global alarmHour
+    global alarmMin
+    if is_mil_time:
+        isAlarmMilTime = True
+    else:
+        isAlarmMilTime = False
+    alarmHourstr= alarmHourSb.get()
+    alarmMinstr = alarmMinSb.get()
+    alarmHour = int(alarmHourstr)
+    alarmMin = int(alarmMinstr)
+
+def changeSetName(): #Changes the set alarm button name to set new alarm
+    setBtn.config(text= "Set New Alarm" ,width=12)
 
 def toggleMil():
     global is_mil_time
     is_mil_time = not is_mil_time
+    destroyAmPmCxBox()
+
+def toggleAlarm():
+    global isAlarmOn
+    isAlarmOn = not isAlarmOn
+
+def destroyAmPmCxBox():
+    if is_mil_time & isAlarmsOpen:
+        amCkBox.pack_forget()
+        pmCkBox.pack_forget()
 
 def createWidiges():
     createUI()
+    
 
     createTimeLbl()
     createMilCxBox()
     createTimeZoneBtn() 
     createStopBtn()
-    createSetBtn()
+    createSetBtn("Set Alarm")
     createSnoozBtn()
-    createAlarmBtns()
+    if debug:
+        createDebugBtn()
+    
+    
 
     
     
@@ -222,6 +315,7 @@ def runClock():
 
 
     root.after(1,runClock)
+    root.after(10,checkForAlarmTime)
 
 def updateWidiges():
     #get cur window size 
@@ -234,6 +328,21 @@ def updateWidiges():
     time_lbl.place(x = x/2 , y = y/2, anchor = CENTER)
     ui.config(width=x)
     ui.place(x=0,y=y-50)
+    if isAlarmsOpen == True:
+        alarmsTab.config(width=x)
+        alarmsTab.place(x=0,y=0)
+        if is_mil_time == False & isAlarmsOpen:
+            amCkBox.pack(before= alarmMinSb, side= RIGHT)
+            pmCkBox.pack(before= amCkBox, side= RIGHT)
+        
+def checkForAlarmTime():
+    if (isAlarmOn == True and not isAlarmPlaying):
+        if isAlarmMilTime:
+            if (alarmHour == cur_hour and alarmMin == cur_min):
+                 playAlarm()
+        else:
+            if (alarmHour == cur_hour -12 and alarmMin == cur_min):
+                    playAlarm()
     
 
     
@@ -251,186 +360,16 @@ def main():
 
     root.mainloop()
 
+#Creates a button for debuging/testing. Use button for one time calls of something you are testing
+def createDebugBtn():
+    debugBtn = Button(ui, text="Debug", command=debugPrint)
+    debugBtn.pack()
 
+#Function for a debug print statment
+def debugPrint():
+    print(isAlarmPlaying)
     
     
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 main()
-
-
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# #prints changeBday
-# def changeBDay(yearsToAdd = 0, daysToAdd = 0, mounthsToAdd = 0):
-#     global b_day
-#     global b_day_year
-#     global b_day_month
-#     global bday_day
-#     b_day_year += yearsToAdd
-#     b_day_month += mounthsToAdd
-#     bday_day += daysToAdd
-#     print(b_day)
-
-
-
-
-# #main funtion
-# def main():
-#     print("\nHi dad it's "+ name)
-#     wait(1)
-#     var1 = input("\nWhere did you go? ")
-#     print("...")
-#     wait(1)
-#     print("You suck")
-#     wait(1)
-#     print("Do you even remeber my birthday?")
-#     wait(1)
-#     changeBDay(50)
-# b_day_month = 7
-# bday_day = 23 
-# b_day_year = 2006
-# b_day = str(b_day_month) + "/" + str(23) + "/" + str(b_day_year)
-# name = "Dawson"

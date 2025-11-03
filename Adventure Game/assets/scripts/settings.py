@@ -1,0 +1,61 @@
+import pygame as pg
+import random
+import os
+import pyautogui
+import sys
+from pygame.math import Vector2 as vec
+# Colors
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+darkRed = (82,10,13)
+green = (0,255,0)
+blue = (0,0,255)
+mint = (142,232,132)
+yellow = (245,245,5)
+violet = (160, 0, 250)
+pink = (255, 0, 255)
+lilac = (230,215,255)
+transparent = (0,0,0,0)
+
+WIDTH , HEIGHT= pyautogui.size()
+TITLE = "PewPew"
+
+FPS = 60
+tileCount = (16, 16)
+TILE_SIZE = (WIDTH/tileCount[0],HEIGHT/tileCount[1])
+tile_w = WIDTH/tileCount[0]
+tile_h = HEIGHT/tileCount[1]
+
+bgWidth =8000
+bgHeight =8000
+
+gameDir = os.path.dirname(__file__)
+gameDir = gameDir.replace("\assets\scripts", "")
+assetsDir = os.path.join(gameDir,"assets")
+mapDir = os.path.join(assetsDir,"maps")
+scriptsDir = os.path.join(assetsDir,"scripts")
+classDir = os.path.join(scriptsDir,"classes")
+soundsDir = os.path.join(assetsDir,"sounds")
+spritesDir = os.path.join(assetsDir,"sprites")
+
+spawnPos = [(900,700),(bgWidth-900,700),(900,bgHeight-700),(bgWidth-900,bgHeight-700)]
+PATHS ={"game":gameDir,
+        "assets":os.path.join(gameDir,"assets"),
+        "sprites":os.path.join(gameDir,"assets\sprites"),
+        "maps":os.path.join(gameDir,"assets\maps"),
+        "scripts":os.path.join(gameDir,"assets\scripts"),
+        "player":os.path.join(gameDir,"assets\sprites\player"),
+        "coffin":os.path.join(spritesDir,"monster\coffin"),
+        "cactus":os.path.join(spritesDir,"monster\cactus"),
+        "bullet":os.path.join(spritesDir,"bullet"),
+        "other":os.path.join(spritesDir,"other")}
+
+
+def draw_text(screen, text, size, x, y, color=black, font = 'rockwell'):
+    font_name = pg.font.match_font(font)
+    font = pg.font.Font(font_name, size)
+    text_sprite = font.render(text, False, color)
+    text_rect = text_sprite.get_rect()
+    text_rect.midtop = (x, y)
+    screen.blit(text_sprite, text_rect)

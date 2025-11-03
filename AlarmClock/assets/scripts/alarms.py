@@ -1,5 +1,7 @@
 import winsound
 from assets.scripts.MusicNotes import * 
+import os
+import sys
 
 #notes
 
@@ -69,3 +71,4 @@ def alarm1():
     hhcnote()
     shhcnote()
     shhcnote()
+    sys.exit()

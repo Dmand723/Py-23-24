@@ -1,0 +1,98 @@
+If;Do it because it equals true.
+Float;a data type that supports decimal points
+Logic;an error that does something that was not intended
+Runtime;an error that occurs when the programme in on
+Main;what you should name your first script in a project
+While loop;as long as it is true then it will run.
+Unity;a game engine that C# is the main language
+Doritos;a gamers best snack
+Audio;what one hears.
+FPS;how fast the game is running
+For loop;used to loop a line of code over a number of times.
+Two weeks;how long the first version of python took to write.
+Else if;checking a condition if the last condition isn’t met.
+Equals;equals - checks if something is the same as something else
+Null;When something doesn’t have a value.
+Print;Helpful for debugging.
+Sfx;Sounds
+Warning;when something isn’t necessarily wrong, just might not be fully right.
+Code Comment;Allows you to write descriptions for what you need to do / a description of the code.
+Binary;ones and zeros.
+Algorithm;a general step by step process for solving a problem.
+Constant;fixed values, either numbers, letters or strings that do not change
+Iteration;a basic building block for algorithms, it allows steps to be repeated.
+Parse;to examine a program and analyze the syntax or the formatted structure of the code
+Syntax;a set of rules that determines ow the code is formatted that creates the structure of the code
+Block;a group of consecutive statements with the same indentation
+Body;the statements inside a loop
+Element;one of the values in a list.
+Int;a python data type that holds positive and negative whole numbers.
+Pong;first commercialized video game.
+Global;most tedious thing in python.
+Function;a process you can call at any time.
+Mainloop;important function for every python script that repeats itself
+Icon;picture
+Grid;widgets are arranged on this
+Lives;chances until you lose
+Keyboard;physical tool used to create code
+Variables;containers that store information for later use in programming
+Print;statement that puts out information usually followed by (" ")
+String;holds text
+Error;The physical manifestation of pain
+Tkinter;Basic, very buggy rendering engine for python
+Binary;the only real coding language- all other languages are just programs turning this into a format much more easily written and read\
+Python;written over a christmas break by a drunk man while watching a movie with a related name
+Grail;A python- based web browser- no longer exists
+List;very painful beyond the 3rd dimension
+OS;Program a computer runs on
+Mountain Dew;A programmers very best friend
+User;person using your program
+Google;the most helpful tool for a programmer
+Debug;getting rid of bad things in your program
+Frame;an easy way to pack things in a window.
+Error;There are 3 types
+Underscore;the most popular way to make multi word variables
+Procrastinate;What programmers are best at
+Snake;not what python was named after
+Import;And then there was time
+Comment;VERY IMPORTANT, REMEMBER BEFORE IT BECOMES TOO LATE
+Sleep;No coder gets enough.
+Monty Python;The creator of Python watched this show while creating Python.
+Pycharm;Widely considered the best IDE to code with.
+Syntax error;The most common Python error.
+Runtime error;An error that occurs during program execution.
+Mr Broadbent;A person who teaches Python.
+Print;The code to make text appear on the screen.
+Float;A function that holds numbers with decimals.
+Integers;Real numbers
+Binary;The name of the language Python interprets.
+Three;The number of major updates Python has had.
+IDE;Integrated Development Program
+Program;a Python project is called a…
+Python;a type of snake with no fangs
+Syntax;Programming Grammar
+IDLE;IDE that comes when downloading python
+Python.org;Where can I download python
+64 bits;how much information can be in a float variable
+True;Booleans are not numbers
+Decimals;difference between integer and float variables
+widgets;the things that you interact with
+destroy;used after root. to break the program down
+music;noise that you can play
+jazz;a difficult word to guess
+pythons;multipleof one snake
+main;the main thing to execute the program
+def;what you do to tell the program what you are doing
+pack;where you are putting widgets
+place;where you are placing the widgets exactly
+spaces;file names should never
+master;slaves
+root;window to manipulate program
+bool;data type that can be true of false
+unity;a program to build games
+binary;base two number system
+concatenate;combining multiple strings
+algorithm;a set of instructions to address a specific problem
+arrays;containers that include variables which are used to collect related variables.
+github;a website that you can upload and download programs
+Nintendo;makes interesting controllers
